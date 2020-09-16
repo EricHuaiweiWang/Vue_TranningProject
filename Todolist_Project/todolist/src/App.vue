@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <h1>hello app</h1>
-    <hello/>
     <todolist></todolist>
     <router-view/>
   </div>
@@ -10,6 +8,8 @@
 <script>
 import hello from './components/Hello'
 import todolist from './components/TodoList'
+import elementUI from './components/elementUI'
+
 export default{
   data () {
     return {
@@ -18,7 +18,8 @@ export default{
   },
   components: {
     hello,
-    todolist
+    todolist,
+    elementUI
   }
 }
 </script>
