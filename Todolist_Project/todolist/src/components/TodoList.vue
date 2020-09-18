@@ -65,7 +65,16 @@
                 <el-col :span="1">
                   <el-checkbox v-model="item.value" @change="changStatus(item.id,''+item.value+'')"></el-checkbox>
                 </el-col>
-                <el-col :span="15">{{item.content}}</el-col>
+                <el-col :span="10">{{item.content}}</el-col>
+                <el-col :span="5">
+                  <div>
+                    <el-link icon="el-icon-edit">编辑</el-link>
+                    <el-link>
+                      查看
+                      <i class="el-icon-view el-icon--right"></i>
+                    </el-link>
+                  </div>
+                </el-col>
                 <el-col
                   :span="6"
                   class="color-dark-light"
@@ -90,129 +99,114 @@
     </el-container>
   </el-container>
 </template>
-<script src="common/base.js?t=20200917"/>
 
 <script>
-Date.prototype.Format = function(fmt) {
-  // author: meizz
-  let o = {
-    "M+": this.getMonth() + 1, // 月份
-    "d+": this.getDate(), // 日
-    "h+": this.getHours(), // 小时
-    "m+": this.getMinutes(), // 分
-    "s+": this.getSeconds(), // 秒
-    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
-    S: this.getMilliseconds() // 毫秒
-  };
-  if (/(y+)/.test(fmt))
-    fmt = fmt.replace(
-      RegExp.$1,
-      (this.getFullYear() + "").substr(4 - RegExp.$1.length)
-    );
-  for (let k in o) {
-    if (new RegExp("(" + k + ")").test(fmt))
-      fmt = fmt.replace(
-        RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
-      );
-  }
-  return fmt;
-};
+import './common/base'
+
 export default {
-  data() {
+  data () {
     return {
-      list: !localStorage.getItem("todoData")
+      list: !localStorage.getItem('todoData')
         ? []
-        : JSON.parse(localStorage.getItem("todoData")),
-      content: "",
-      selected: "",
+        : JSON.parse(localStorage.getItem('todoData')),
+      content: '',
+      selected: '',
       currentPage: 1,
       pageSize: 5,
-      total: 0,
       options: [
         {
-          value: "0",
-          label: "全部"
+          value: '0',
+          label: '全部'
         },
         {
-          value: "1",
-          label: "完成"
+          value: '1',
+          label: '完成'
         },
         {
-          value: "",
-          label: "未完成"
+          value: '',
+          label: '未完成'
         }
       ]
-    };
+    }
   },
   computed: {
-    changeOption() {
-      let sel = this.selected === "1" ? true : this.selected;
-      let result;
-      if (sel === "0") {
-        result = this.list;
+    total () {
+      let sel = this.selected === '1' ? true : this.selected
+      let result
+      if (sel === '0') {
+        result = this.list
       } else {
-        result = this.list.filter(function(item) {
-          return item.value === sel;
-        });
+        result = this.list.filter(function (item) {
+          return item.value === sel
+        })
       }
-
-      this.total = result.length;
+      return result.length
+    },
+    changeOption () {
+      let sel = this.selected === '1' ? true : this.selected
+      let result
+      if (sel === '0') {
+        result = this.list
+      } else {
+        result = this.list.filter(function (item) {
+          return item.value === sel
+        })
+      }
       return result.slice(
         (this.currentPage - 1) * this.pageSize,
         this.currentPage * this.pageSize
-      );
+      )
     }
   },
   filters: {
-    capitalize: function(value) {
-      if (!value) return "";
-      return new Date(value).Format("yyyy-MM-dd hh:mm:ss");
+    capitalize: function (value) {
+      if (!value) return ''
+      return new Date(value).Format('yyyy-MM-dd hh:mm:ss')
     }
   },
   methods: {
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
     },
-    deleteItem(id) {
+    deleteItem (id) {
       for (let i = 0, len = this.list.length; i < len; i++) {
         if (this.list[i].id === id) {
-          this.list.splice(i, 1);
+          this.list.splice(i, 1)
         }
       }
-      this.saveLocal();
+      this.saveLocal()
     },
-    changStatus(id, value) {
-      console.log('id:'+id+','+'value:'+value)
-      for(let item of this.list){
-        if(item.id===id) item.value=value==="true"?true:'';
+    changStatus (id, value) {
+      console.log('id:' + id + ',' + 'value:' + value)
+      for (let item of this.list) {
+        if (item.id === id) item.value = value === 'true' ? true : ''
       }
-      this.saveLocal();
-      //return;
+      this.saveLocal()
+      // return;
     },
-    saveTodo() {
-      console.log("clicked");
+    saveTodo () {
+      console.log('clicked')
       if (!this.content) {
         this.$message({
-          message: "友情提示，内容不能为空哦",
-          type: "warning"
-        });
-        return;
+          message: '友情提示，内容不能为空哦',
+          type: 'warning'
+        })
+        return
       }
       this.list.push({
         id: this.list.length,
         content: this.content,
-        value: "",
+        value: '',
         created: new Date()
-      });
-      this.content = "";
-      this.saveLocal();
+      })
+      this.content = ''
+      this.saveLocal()
     },
-    saveLocal() {
-      localStorage.setItem("todoData", JSON.stringify(this.list));
+    saveLocal () {
+      localStorage.setItem('todoData', JSON.stringify(this.list))
     }
   }
-};
+}
 </script>
 <style lang="css" scoped>
 .delete_btn {
