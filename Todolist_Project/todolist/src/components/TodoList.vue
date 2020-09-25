@@ -3,8 +3,29 @@
     <el-container>
       <el-header>
         <h1>My Todo</h1>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <div class="empty"></div>
+          </el-col>
+          <el-col :span="8">
+            <div class="block">
+              <el-carousel height="200px" indicator-position="none">
+                <el-carousel-item v-for="item of imgArray" :key="item.url">
+                  <el-image fit="cover" :src="item.url"></el-image>
+                </el-carousel-item>
+              </el-carousel>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="empty"></div>
+          </el-col>
+        </el-row>
       </el-header>
+      <el-row :gutter="10" style="height:200px"></el-row>
       <el-main>
+        <el-row :gutter="10" style="height:1px">
+          <el-col :span="6"></el-col>
+        </el-row>
         <el-row style="padding-bottom:10px;">
           <el-col :span="8">
             <div class="empty"></div>
@@ -14,7 +35,8 @@
               v-model.trim="content"
               placeholder="请输入内容,enter保存哈"
               @keyup.enter.native="saveTodo"
-            ></el-input>
+              clearable
+            />
           </el-col>
           <el-col :span="8">
             <div class="empty"></div>
@@ -68,11 +90,7 @@
                 <el-col :span="10">{{item.content}}</el-col>
                 <el-col :span="5">
                   <div>
-                    <el-link icon="el-icon-edit">编辑</el-link>
-                    <el-link>
-                      查看
-                      <i class="el-icon-view el-icon--right"></i>
-                    </el-link>
+                    <el-link icon="el-icon-edit" @click="drawer = true,drawerTitle=item.content"></el-link>
                   </div>
                 </el-col>
                 <el-col
@@ -97,11 +115,23 @@
       </el-main>
       <el-footer></el-footer>
     </el-container>
+    <el-drawer title="details" :visible.sync="drawer" :with-header="true">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <div class="empty"></div>
+        </el-col>
+        <el-col :span="8">
+          <el-input placeholder="请输入内容" v-model="drawerTitle" clearable></el-input>
+        </el-col>
+        <el-col :span="8"></el-col>
+      </el-row>
+    </el-drawer>
   </el-container>
 </template>
 
 <script>
 import './common/base'
+// import '../assets/banner'../assets/banner/b1.jpg
 
 export default {
   data () {
@@ -109,10 +139,24 @@ export default {
       list: !localStorage.getItem('todoData')
         ? []
         : JSON.parse(localStorage.getItem('todoData')),
+      imgArray: [
+        {
+          url: require('../assets/banner/designers-desk-with-coffee-wireframes.jpg')
+        },
+        {
+          url: require('../assets/banner/tech-group-meeting-flatlay.jpg')
+        },
+        { url: require('../assets/banner/b1.jpg') },
+        {
+          url: require('../assets/banner/making-a-budget-tracking-finances.jpg')
+        }
+      ],
       content: '',
-      selected: '',
+      selected: '0',
       currentPage: 1,
       pageSize: 5,
+      drawer: false,
+      drawerTitle: '',
       options: [
         {
           value: '0',
@@ -132,7 +176,7 @@ export default {
   computed: {
     total () {
       let sel = this.selected === '1' ? true : this.selected
-      let result
+      let result = []
       if (sel === '0') {
         result = this.list
       } else {
@@ -144,7 +188,7 @@ export default {
     },
     changeOption () {
       let sel = this.selected === '1' ? true : this.selected
-      let result
+      let result = []
       if (sel === '0') {
         result = this.list
       } else {
@@ -182,7 +226,6 @@ export default {
         if (item.id === id) item.value = value === 'true' ? true : ''
       }
       this.saveLocal()
-      // return;
     },
     saveTodo () {
       console.log('clicked')
@@ -209,6 +252,21 @@ export default {
 }
 </script>
 <style lang="css" scoped>
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 18px;
+  opacity: 0.75;
+  line-height: 300px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
 .delete_btn {
   color: black;
   background-color: #409eff00;
