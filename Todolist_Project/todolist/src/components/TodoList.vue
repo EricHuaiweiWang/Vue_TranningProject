@@ -2,7 +2,9 @@
   <el-container>
     <el-container>
       <el-header>
-        <h1>My Todo</h1>
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>My Todo</el-breadcrumb-item>
+        </el-breadcrumb>
         <el-row :gutter="10">
           <el-col :span="8">
             <div class="empty"></div>
@@ -11,7 +13,7 @@
             <div class="block">
               <el-carousel height="200px" indicator-position="none">
                 <el-carousel-item v-for="item of imgArray" :key="item.url">
-                  <el-image fit="cover" :src="item.url"></el-image>
+                  <el-image fit="fill" style="border-radius: 4px" :src="item.url"></el-image>
                 </el-carousel-item>
               </el-carousel>
             </div>
@@ -87,10 +89,13 @@
                 <el-col :span="1">
                   <el-checkbox v-model="item.value" @change="changStatus(item.id,''+item.value+'')"></el-checkbox>
                 </el-col>
-                <el-col :span="10">{{item.content}}</el-col>
+                <el-col :span="10" class="ellipsis">{{item.content}}</el-col>
                 <el-col :span="5">
                   <div>
-                    <el-link icon="el-icon-edit" @click="drawer = true,drawerTitle=item.content"></el-link>
+                    <el-link
+                      icon="el-icon-edit"
+                      @click="drawer = true,drawerTitle=item.content,selectedItem=item"
+                    ></el-link>
                   </div>
                 </el-col>
                 <el-col
@@ -117,13 +122,13 @@
     </el-container>
     <el-drawer title="details" :visible.sync="drawer" :with-header="true">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <div class="empty"></div>
         </el-col>
-        <el-col :span="8">
-          <el-input placeholder="请输入内容" v-model="drawerTitle" clearable></el-input>
+        <el-col :span="12">
+          <el-input type="textarea" placeholder="请输入内容" v-model="drawerTitle" @change="changStatus(selectedItem.id,''+selectedItem.value+'')" clearable></el-input>
         </el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="6"></el-col>
       </el-row>
     </el-drawer>
   </el-container>
@@ -156,6 +161,7 @@ export default {
       currentPage: 1,
       pageSize: 5,
       drawer: false,
+      selectedItem: {},
       drawerTitle: '',
       options: [
         {
@@ -221,9 +227,20 @@ export default {
       this.saveLocal()
     },
     changStatus (id, value) {
+      console.log(99)
       console.log('id:' + id + ',' + 'value:' + value)
       for (let item of this.list) {
-        if (item.id === id) item.value = value === 'true' ? true : ''
+        if (item.id === id) {
+          item.value = value === 'true' ? true : ''
+          if (!this.drawer) {
+            this.$message({
+              message: '友情提示，内容不能为空哦',
+              type: 'warning'
+            })
+            return
+          }
+          item.content = this.drawerTitle
+        }
       }
       this.saveLocal()
     },
@@ -252,6 +269,22 @@ export default {
 }
 </script>
 <style lang="css" scoped>
+.ellipsis {
+  /* 显示一行，省略号 */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  width: 180px;
+  /* 显示两行，省略号 */
+  /* text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical; */
+}
 .el-carousel__item h3 {
   color: #475669;
   font-size: 18px;
