@@ -1,31 +1,26 @@
 <template>
   <div id="app">
-    <todolist></todolist>
-    <router-view/>
+      <home></home>
+      <router-view />
   </div>
 </template>
 
 <script>
-import hello from './components/Hello'
-import todolist from './components/TodoList'
-import elementUI from './components/elementUI'
-
-export default{
+import home from './components/Home'
+export default {
   data () {
     return {
       name: 'ss'
     }
   },
   components: {
-    hello,
-    todolist,
-    elementUI
+    home
   }
 }
 </script>
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
