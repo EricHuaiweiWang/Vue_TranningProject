@@ -28,7 +28,6 @@ export default {
       Item: {}
     }
   },
-  // props: ['drawerTitle', 'sdrawer', 'selectedItem'],
   methods: {
     triggerChange (visble, item) {
       this.Title = item.content
@@ -43,9 +42,3 @@ export default {
 }
 
 </script>
-<style scoped>
-.empty {
-  width: 1px;
-  height: 1px;
-}
-</style>

@@ -229,23 +229,6 @@ export default {
 }
 </script>
 <style lang="css" scoped>
-.ellipsis {
-  /* 显示一行，省略号 */
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-  width: 180px;
-  /* 显示两行，省略号 */
-  /* text-overflow: -o-ellipsis-lastline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical; */
-}
-
 .delete_btn {
   color: black;
   background-color: #409eff00;
@@ -257,10 +240,6 @@ export default {
   color: black;
   background-color: #f4f7fa00;
   border-width: 0px;
-}
-.empty {
-  width: 1px;
-  height: 1px;
 }
 .flip-list-move {
   transition: transform 1s;

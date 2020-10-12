@@ -65,10 +65,6 @@ export default {
 }
 </script>
 <style scoped>
-.empty {
-  width: 1px;
-  height: 1px;
-}
 .el-header {
   width: 100%;
   height: 280px !important;
